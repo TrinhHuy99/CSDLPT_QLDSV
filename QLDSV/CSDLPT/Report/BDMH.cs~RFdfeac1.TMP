@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using DevExpress.XtraEditors;
+
+namespace QLDSV.Report
+{
+    public partial class BDMH : DevExpress.XtraEditors.XtraForm
+    {
+        public BDMH()
+        {
+            InitializeComponent();
+        }
+
+        private void BDMH_Load(object sender, EventArgs e)
+        {
+            Program.Bds_Dspm.Filter = "TENKHOA LIKE 'KHOA%'";
+            Utils.BindingDataToComBo(cmbKhoa, Program.Bds_Dspm.DataSource);
+
+            loadInitializeData();
+
+            Program.Bds_Dspm.Filter = "TENKHOA LIKE 'KHOA%'";
+            Utils.BindingDataToComBo(cmbKhoa, Program.Bds_Dspm.DataSource);
+
+            loadInitializeData();
+
+            if (Program.MGroup == Program.NhomQuyen[0])
+            {
+                cmbKhoa.Visible = true;
+                cmbKhoa.Enabled = true;
+                labelKhoa.Visible = false;
+            }
+            if (Program.MGroup == Program.NhomQuyen[1]|| Program.MGroup == Program.NhomQuyen[3])
+            {
+                cmbKhoa.Visible = false;
+                cmbKhoa.Enabled = false;
+                label_Khoa.Visible = false;
+                labelKhoa.Visible = true;
+                labelKhoa.Text = ((DataRowView)Program.Bds_Dspm[Program.MKhoa])["TENKHOA"].ToString();
+            }
+
+            this.cmbLan.Items.Add(1);
+            this.cmbLan.Items.Add(2);
+            this.cmbLan.SelectedIndex = 0;
+            this.txtMaLop.Text = this.cmbTenLop.SelectedValue.ToString();
+            this.txtMaMonHoc.Text = this.cmbTenMonHoc.SelectedValue.ToString();
+
+
+
+            this.cmbLan.Items.Add(1);
+            this.cmbLan.Items.Add(2);
+            this.cmbLan.SelectedIndex = 0;
+            this.txtMaLop.Text = this.cmbTenLop.SelectedValue.ToString();
+            this.txtMaMonHoc.Text = this.cmbTenMonHoc.SelectedValue.ToString();
+
+        }
+        private void loadInitializeData()
+        {
+            this.qLDSVDataSet.EnforceConstraints = false;
+            // TODO: This line of code loads data into the 'qLDSVDataSet.MONHOC' table. You can move, or remove it, as needed.
+            this.mONHOCTableAdapter.Connection.ConnectionString = Program.URL_Connect;
+            this.mONHOCTableAdapter.Fill(this.qLDSVDataSet.MONHOC);
+            // TODO: This line of code loads data into the 'qLDSVDataSet.LOP' table. You can move, or remove it, as needed.
+            this.lOPTableAdapter.Connection.ConnectionString = Program.URL_Connect;
+            this.lOPTableAdapter.Fill(this.qLDSVDataSet.LOP);
+        }
+    } 
+}
